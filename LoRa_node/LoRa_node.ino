@@ -16,13 +16,13 @@ struct msg {
 struct msg serialMsg;
 void setup() {
  Serial.begin(9600);
+ e32ttl.begin();
  pinMode(AUX_PIN,INPUT);
 }
 
 
 void loop() {
   read_serial();
-
 
 }
 
