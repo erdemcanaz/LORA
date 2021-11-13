@@ -130,7 +130,7 @@ void print_msg(boolean isSerial,boolean isFormatted) {
       Serial.print("," + String(loraMsg.FLOAT_VALUE, 5));
       Serial.println("$");
     }
-  }else{}
+  }else{
   if (isSerial) {
     Serial.print("SerialMsg //:");
     Serial.print(" SENDER_ID:" + String(serialMsg.SENDER_ID));
@@ -147,4 +147,5 @@ void print_msg(boolean isSerial,boolean isFormatted) {
     Serial.print(" WHICH_OBJECT:" + String(loraMsg.WHICH_OBJECT));
     Serial.println(" FLOAT_VALUE:" + String(loraMsg.FLOAT_VALUE, 5));
   }
+}
 }
