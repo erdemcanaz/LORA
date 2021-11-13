@@ -17,7 +17,7 @@ struct msg {
   int WHICH_OBJECT = 0;
   float FLOAT_VALUE = 0;
 };
-struct msg serialMsg,
+struct msg serialMsg;
 
 unsigned long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;
@@ -77,4 +77,13 @@ boolean read_serial() {
 
   }
   return false;
+}
+void print_serialMsg() {
+  Serial.println("SerialMsg----(" + String(millis()) + ")");
+  Serial.println("SENDER_ID:" + String(serialMsg.SENDER_ID));
+  Serial.println("DESTINATION_ID:" + String(serialMsg.DESTINATION_ID));
+  Serial.println("TASK:" + String(serialMsg.TASK));
+  Serial.println("WHICH_OBJECT:" + String(serialMsg.WHICH_OBJECT));
+  Serial.println("FLOAT_VALUE:" + String(serialMsg.FLOAT_VALUE, 5));
+  Serial.println("---------------");
 }
