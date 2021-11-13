@@ -1,4 +1,4 @@
-#define TROUBLESHOOTING true
+#define TROUBLESHOOTING false
 #define AUX_PIN 8
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
@@ -70,7 +70,7 @@ boolean read_serial_and_broadcast_it(int period) {
     while (k > 1)k = k / 10.0f;
     serialMsg.FLOAT_VALUE = values[4] + k;
 
-    if (TROUBLESHOOTING)print_msg(true);
+    if (TROUBLESHOOTING)print_msg(true,false);
     for (int i = 0 ; i < 7; i ++)values[i] = 0;
     isSerialLocked = true;
 
@@ -107,12 +107,30 @@ void listen_broadcast_and_write_it_to_serial() {
     if (TROUBLESHOOTING)Serial.println("LoRa'daki mesaj okunuyor");
     ResponseStructContainer rsc = e32ttl.receiveMessage(sizeof(msg));//LoRa'daki mesajı oku
     loraMsg = *(msg*) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
-    print_msg(false);
+    print_msg(false,true);
 
   }
 }
 
-void print_msg(boolean isSerial) {
+void print_msg(boolean isSerial,boolean isFormatted) {
+  if(isFormatted){
+    if (isSerial) {
+      Serial.print("#" + String(serialMsg.SENDER_ID));
+      Serial.print("," + String(serialMsg.DESTINATION_ID));
+      Serial.print("," + String(serialMsg.TASK));
+      Serial.print("," + String(serialMsg.WHICH_OBJECT));
+      Serial.print("," + String(serialMsg.FLOAT_VALUE, 5));
+      Serial.println("$");
+    }
+    else {
+      Serial.print("#" + String(loraMsg.SENDER_ID));
+      Serial.print("," + String(loraMsg.DESTINATION_ID));
+      Serial.print("," + String(loraMsg.TASK));
+      Serial.print("," + String(loraMsg.WHICH_OBJECT));
+      Serial.print("," + String(loraMsg.FLOAT_VALUE, 5));
+      Serial.println("$");
+    }
+  }else{}
   if (isSerial) {
     Serial.print("SerialMsg //:");
     Serial.print(" SENDER_ID:" + String(serialMsg.SENDER_ID));
@@ -129,5 +147,5 @@ void print_msg(boolean isSerial) {
     Serial.print(" WHICH_OBJECT:" + String(loraMsg.WHICH_OBJECT));
     Serial.println(" FLOAT_VALUE:" + String(loraMsg.FLOAT_VALUE, 5));
   }
-
+}
 }

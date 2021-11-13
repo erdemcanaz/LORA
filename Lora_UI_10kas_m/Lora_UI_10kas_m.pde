@@ -24,8 +24,6 @@ void draw() {
 //Updates
 long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;
-long lastTimeSerialData = 0;
-long SERIAL_TIMEOUT_MS = 5000;
 
 boolean listenSerial() {
 //#: start $:end ;:other variable .:other variable
@@ -38,12 +36,7 @@ boolean listenSerial() {
   }
   else if (c == '#') {
     f.clean_values();
-    isSerialLocked = false;
-    lastTimeSerialData = millis();
-  }
-  else if (millis() - lastTimeSerialData > SERIAL_TIMEOUT_MS) {
-    isSerialLocked = true;
-    return false;
+    isSerialLocked = false;   
   }
   else if (c == '$') {
     int counter = (int)(values[6]);
@@ -55,6 +48,7 @@ boolean listenSerial() {
     
     float k = values[5];
     while (k > 1)k = k / 10.0f;
+    println("reply",values[0],values[1],values[2],values[3],values[4]+k);
     f.broadcastReplyToAllDevices(values[0],values[1],values[2],values[3],values[4]+k);
     //
     f.clean_values();
@@ -76,7 +70,7 @@ boolean listenSerial() {
 int indexNow=0;
 long lastTimeQueAsked = 0;
 void askQue() {
-  long QUE_DELAY_MS = 10000;
+  long QUE_DELAY_MS = 3000;
   if (System.currentTimeMillis()-lastTimeQueAsked<QUE_DELAY_MS)return;
   lastTimeQueAsked=System.currentTimeMillis();
   //----
@@ -104,7 +98,7 @@ void askQue() {
   } else {
     device_objs[indexNow].updated();
   }
-  //println(subQues[0]);
+  println("soruldu:",subQues[0]);
   myPort.write(subQues[0]);
   if (nextQue.equals(""))que[indexNow]=null;
   else que[indexNow]=nextQue;
