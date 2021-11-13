@@ -1,11 +1,15 @@
 #define TROUBLESHOOTING true
 
+
 void setup() {
  Serial.begin(9600);
 }
 
+
 void loop() {
-  read_serial();
+  if(read_serial()){
+    e32ttl.sendFixedMessage(0, 0, 0, &serialMsg, sizeof(msg));
+  }
 
 }
 
