@@ -1,5 +1,9 @@
 #define TROUBLESHOOTING true
+#include "LoRa_E32.h"
+#include <SoftwareSerial.h>
 
+SoftwareSerial mySerial(10, 11);
+LoRa_E32 e32ttl(&mySerial);
 
 void setup() {
  Serial.begin(9600);
