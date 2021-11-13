@@ -1,5 +1,5 @@
 #define TROUBLESHOOTING true
-#define AUX_PIN
+#define AUX_PIN 8
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
 
@@ -22,7 +22,7 @@ void setup() {
 
 
 void loop() {
-  read_serial(2000);
+  read_serial_and_broadcast_it(2000);
 
 }
 
@@ -30,11 +30,9 @@ void loop() {
 unsigned long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;
 unsigned long last_time_read_serial = 0;
-boolean read_serial(int period) {
+boolean read_serial_and_broadcast_it(int period) {
   //#: start $:end ;:other variable .:other variable
   //negative values are omited
-  if(millis()-last_time_read_serial<period)return;
-  last_time_read_serial=millis();
 
   if (!(Serial.available() > 0))return false;
   char c = Serial.read();
@@ -74,6 +72,10 @@ boolean read_serial(int period) {
     if (TROUBLESHOOTING)print_serialMsg();
     for (int i = 0 ; i < 7; i ++)values[i]=0;
     isSerialLocked = true;
+
+    if(millis()-last_time_read_serial<period)return;
+    last_time_read_serial=millis();
+
     while(digitalRead(AUX_PIN)==0){
       if (TROUBLESHOOTING)Serial.println("LoRa'nin musait olmasini bekliyorum");
       delay(5);
