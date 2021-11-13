@@ -5,26 +5,29 @@
 SoftwareSerial mySerial(10, 11);
 LoRa_E32 e32ttl(&mySerial);
 
+struct msg {
+  unsigned long SENDER_ID = 0;
+  unsigned long DESTINATION_ID = 0;
+  int TASK = 0;
+  int WHICH_OBJECT = 0;
+  float FLOAT_VALUE = 0;
+};
+struct msg serialMsg;
 void setup() {
  Serial.begin(9600);
 }
 
 
 void loop() {
-  if(read_serial()){
+  boolean b = read_serial();
+  if(b){
     e32ttl.sendFixedMessage(0, 0, 0, &serialMsg, sizeof(msg));
+    if(TROUBLESHOOTING)Serial.println("serialMsg lora uzerinden yayinlandi");
   }
+
 
 }
 
-struct msg {
-  unsigned long SENDER_ID = "";
-  unsigned long DESTINATION_ID = "";
-  int TASK = 0;
-  int WHICH_OBJECT = 0;
-  float FLOAT_VALUE = 0;
-};
-struct msg serialMsg;
 
 unsigned long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;
