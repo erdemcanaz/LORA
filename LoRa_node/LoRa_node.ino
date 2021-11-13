@@ -73,7 +73,10 @@ boolean read_serial_and_broadcast_it(int period) {
     for (int i = 0 ; i < 7; i ++)values[i]=0;
     isSerialLocked = true;
 
-    if(millis()-last_time_read_serial<period)return;
+    if(millis()-last_time_read_serial<period){
+      if (TROUBLESHOOTING)Serial.println("Son broadcast'ten beri yeterince zaman gecmedi");
+      return;
+    }
     last_time_read_serial=millis();
 
     while(digitalRead(AUX_PIN)==0){
