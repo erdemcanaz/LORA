@@ -10,6 +10,15 @@ void loop() {
 
 }
 
+struct msg {
+  unsigned long SENDER_ID = "";
+  unsigned long DESTINATION_ID = "";
+  int TASK = 0;
+  int WHICH_OBJECT = 0;
+  float FLOAT_VALUE = 0;
+};
+struct msg serialMsg,
+
 unsigned long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;
 
