@@ -1,5 +1,7 @@
 #define TROUBLESHOOTING false
 #define AUX_PIN 8
+#define RESET_PIN 7
+#define HARD_RESET_TIME 120000
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
 
@@ -15,13 +17,19 @@ struct msg {
 };
 struct msg serialMsg, loraMsg;
 void setup() {
+  digitalWrite(RESET_PIN,HIGH);
   Serial.begin(9600);
   e32ttl.begin();
   pinMode(AUX_PIN, INPUT);
+  pinMode(RESET_PIN,OUTPUT);
+
 }
 
 
 void loop() {
+  ///
+  if(millis()>HARD_RESET_TIME)digitalWrite(RESET_PIN,LOW);
+  ///
   read_serial_and_broadcast_it(2000);
   listen_broadcast_and_write_it_to_serial();
 }
