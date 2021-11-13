@@ -148,4 +148,3 @@ void print_msg(boolean isSerial,boolean isFormatted) {
     Serial.println(" FLOAT_VALUE:" + String(loraMsg.FLOAT_VALUE, 5));
   }
 }
-}
