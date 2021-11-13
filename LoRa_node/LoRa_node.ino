@@ -1,12 +1,11 @@
 #define TROUBLESHOOTING true
 
 void setup() {
-  // put your setup code here, to run once:
-
+ Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  read_serial();
 
 }
 
@@ -79,11 +78,11 @@ boolean read_serial() {
   return false;
 }
 void print_serialMsg() {
-  Serial.println("SerialMsg----(" + String(millis()) + ")");
-  Serial.println("SENDER_ID:" + String(serialMsg.SENDER_ID));
-  Serial.println("DESTINATION_ID:" + String(serialMsg.DESTINATION_ID));
-  Serial.println("TASK:" + String(serialMsg.TASK));
-  Serial.println("WHICH_OBJECT:" + String(serialMsg.WHICH_OBJECT));
-  Serial.println("FLOAT_VALUE:" + String(serialMsg.FLOAT_VALUE, 5));
-  Serial.println("---------------");
+  Serial.print("SerialMsg //:");
+  Serial.print(" SENDER_ID:" + String(serialMsg.SENDER_ID));
+  Serial.print(" DESTINATION_ID:" + String(serialMsg.DESTINATION_ID));
+  Serial.print(" TASK:" + String(serialMsg.TASK));
+  Serial.print(" WHICH_OBJECT:" + String(serialMsg.WHICH_OBJECT));
+  Serial.println(" FLOAT_VALUE:" + String(serialMsg.FLOAT_VALUE, 5));
+
 }
