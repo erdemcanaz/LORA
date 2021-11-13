@@ -31,7 +31,6 @@ boolean read_serial() {
   else if (c == '#') {
     for (int i = 0 ; i < 7; i ++)values[i]=0;
     isSerialLocked = false;
-    lastTimeSerialData = millis();
     if (TROUBLESHOOTING)Serial.println("Serial'daki data okunmaya başlandı");
   }
 
