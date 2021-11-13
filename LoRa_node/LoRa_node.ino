@@ -22,17 +22,20 @@ void setup() {
 
 
 void loop() {
-  read_serial();
+  read_serial(2000);
 
 }
 
 
 unsigned long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;
-
-boolean read_serial() {
+unsigned long last_time_read_serial = 0;
+boolean read_serial(int period) {
   //#: start $:end ;:other variable .:other variable
   //negative values are omited
+  if(millis()-last_time_read_serial<period)return;
+  last_time_read_serial=millis();
+
   if (!(Serial.available() > 0))return false;
   char c = Serial.read();
 
