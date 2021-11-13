@@ -1,4 +1,5 @@
 #define TROUBLESHOOTING true
+#define AUX_PIN
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
 
@@ -15,15 +16,12 @@ struct msg {
 struct msg serialMsg;
 void setup() {
  Serial.begin(9600);
+ pinMode(AUX_PIN,INPUT);
 }
 
 
 void loop() {
-  boolean b = read_serial();
-  if(b){
-    e32ttl.sendFixedMessage(0, 0, 0, &serialMsg, sizeof(msg));
-    if(TROUBLESHOOTING)Serial.println("serialMsg lora uzerinden yayinlandi");
-  }
+  read_serial();
 
 
 }
@@ -71,8 +69,14 @@ boolean read_serial() {
     serialMsg.FLOAT_VALUE = values[4] + k;
 
     if (TROUBLESHOOTING)print_serialMsg();
-      for (int i = 0 ; i < 7; i ++)values[i]=0;
+    for (int i = 0 ; i < 7; i ++)values[i]=0;
     isSerialLocked = true;
+    while(digitalRead(AUX_PIN)==0){
+      if (TROUBLESHOOTING)Serial.println("LoRa'nin musait olmasini bekliyorum");
+      delay(5);
+    }
+    e32ttl.sendFixedMessage(0, 0, 0, &serialMsg, sizeof(msg));
+    if (TROUBLESHOOTING)Serial.println("serialMsg'i lora uzerinden yaydim");
     return true;
 
   } else if (c >= '0' && c <= '9') {
