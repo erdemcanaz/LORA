@@ -55,7 +55,7 @@ void reply_it() {
 
   if (task == 0) { //set WHICH_OBJECT to FLOAT_VALUE
     if (object > 2 && object < 6) { //3,4,5
-      values[WHICH_OBJECT] = serialMsg.FLOAT_VALUE;
+      values[object] = serialMsg.FLOAT_VALUE;
       if (TROUBLESHOOTING)Serial.println(String(object) + ". obje " + String(serialMsg.FLOAT_VALUE) + " degerine set edildi.");
       Serial.print("#" + String(serialMsg.SENDER_ID));
       Serial.print("," + String(serialMsg.DESTINATION_ID));
