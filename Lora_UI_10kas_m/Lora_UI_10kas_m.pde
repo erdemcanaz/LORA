@@ -31,13 +31,12 @@ boolean listenSerial() {
   if (!(myPort.available() > 0))return false;
   char c = (char)myPort.read();
 
-
   if (isSerialLocked && c != '#') {
     return false;
   }
   else if (c == '#') {
     f.clean_values();
-    isSerialLocked = false;   
+    isSerialLocked = false;
   }
   else if (c == '$') {
     int counter = (int)(values[6]);
@@ -46,7 +45,7 @@ boolean listenSerial() {
       return false;
     }
     //
-    
+
     float k = values[5];
     while (k > 1)k = k / 10.0f;
     println("reply",values[0],values[1],values[2],values[3],values[4]+k);
@@ -67,6 +66,7 @@ boolean listenSerial() {
   }
   return false;
 }
+
 
 int indexNow=0;
 long lastTimeQueAsked = 0;
@@ -106,12 +106,10 @@ void askQue() {
 }
 
 void refreshQue() {
-
   for (int i=0; i<128; i++) {
     if (device_objs[i]==null)continue;
     if (device_objs[i].needUpdate && device_objs[i].isActive) {
       que[i]=device_objs[i].addThisToQue();
-      //println(que[i]);
     }
   }
 }

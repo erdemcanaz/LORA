@@ -43,7 +43,7 @@ class F {
     rs+=String.valueOf(SEC);
     return rs;
   }
-  
+
 
   //DRAW//////////////////////////////////////////////////
   private void cleanBackground() {
@@ -61,7 +61,7 @@ class F {
   private void broadcastReplyToAllDevices(long SENDER_ID, long DESTINATION_ID,long TASK, long WHICH_ITEM, float FLOAT_VALUE ){
     for (int i = 0; i<128; i++) {
       if (device_objs[i] != null) {
-        device_objs[i].analzeThisReply(SENDER_ID,DESTINATION_ID,TASK,WHICH_ITEM,FLOAT_VALUE);     
+        device_objs[i].analzeThisReply(SENDER_ID,DESTINATION_ID,TASK,WHICH_ITEM,FLOAT_VALUE);
       }
     }
   }
@@ -82,7 +82,7 @@ class F {
     for (int i=0; i<128; i++) {
       if (device_objs[i]==null)continue;
       int y_next = current_y+ device_objs[i].SHIFT();
-      
+
       if (current_y<=y_test && y_test <= y_next) {
         r[0]=i;
         r[1]=mouseX;

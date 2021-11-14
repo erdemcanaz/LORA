@@ -18,58 +18,44 @@ class Device {
   boolean booleans[]={false, false, false};
   //long unixTime = System.currentTimeMillis() / 1000L;
 
+  String deviceTexts[][] =
+  {
+  {"hava sensörleri","Sıcaklık (C)", "Nem (%)", "Işık (Lux)"," "," "," "},
+  {"mesafe","Mesafe (cm)"," "," "," "," "," "},
+  {"röle"," "," "," ","Röle"," "," "},
+  {"GPS","Enlem","Boylam"," "," "," "," "},
+  {"Rüzgar Hızı","Hız(m/s)"," "," "," "," "," "},
+  {"CO2","CO2 (ppm)"," "," "," "," "," "},
+  {"pH","Asitlik (pH)"," "," "," "," "," "},
+  {"EC","EC (ppm)"," "," "," "," "," "},
+  {"kütle","Kütle (kg)"," "," "," "," "," "},
+  {"hareket sensörü","Son hareketten beri (s)"," "," "," "," "," "},
+  {"tarım sensörleri","Toprak nem (%)","Hava nem(%)","Hava sıcaklık(%)"," "," "," "},
+  {"dijital","In0","In1","In2","Out3","Out4","Out5"},
+  };
+
   public  Device(String ID, String DEVICE_NAME, int index_of_this_object) {
     this.index_of_this_object = index_of_this_object;
     this.ID = ID;
     this.DEVICE_NAME= DEVICE_NAME;
-    last_communication_unix = System.currentTimeMillis() /1000L;
-    last_update_unix = System.currentTimeMillis() /1000L;
-    if (DEVICE_NAME.equals("hava sensörleri")) {
-      texts[0]= "Sıcaklık (C)";
-      texts[1]= "Nem %";
-      texts[2]= "Işık şiddeti (LUX)";
-    } else if (DEVICE_NAME.equals("mesafe")) {
-      texts[0]="Mesafe (cm)" ;
-    } else if (DEVICE_NAME.equals("röle")) {
-      texts[3]="Röle";
-    } else if (DEVICE_NAME.equals("GPS")) {
-      texts[0]="Enlem";
-      texts[1]="Boylam";
-    } else if (DEVICE_NAME.equals("rüzgar hızı")) {
-      texts[0]="Hız (m/s)";
-    } else if (DEVICE_NAME.equals("CO2")) {
-      texts[0]="CO2 (ppm)";
-    } else if (DEVICE_NAME.equals("pH") ) {
-      texts[0]="Asitlik (pH)";
-    } else if (DEVICE_NAME.equals("EC") ) {
-      texts[0]="EC (ppm)";
-    } else if (DEVICE_NAME.equals("kütle")) {
-      texts[0]="Kütle (kg)";
-    } else if (DEVICE_NAME.equals("hareket sensörü")) {
-      texts[0]="Son hareketten beri geçen süre(s)";
-    } else if (DEVICE_NAME.equals("tarım sensörleri")) {
-      texts[0]="Toprak nem (%)";
-      texts[1]="Hava nem (%)";
-      texts[2]="Hava sıcaklık (C)";
-    } else if (DEVICE_NAME.equals("dijital")) {
-      texts[0]="In0";
-      texts[1]="In1";
-      texts[2]="In2";
-      texts[3]="Out3";
-      texts[4]="Out4";
-      texts[5]="Out5";
-    } else {
-      texts[0]="item0";
-      texts[1]="item1";
-      texts[2]="item2";
-      texts[3]="item3";
-      texts[4]="item4";
-      texts[5]="item5";
+    last_communication_unix = System.currentTimeMillis() /1000L;//the last data received or when it is generated as a device
+    last_update_unix = System.currentTimeMillis() /1000L; //the last time its questions are added to que
+
+    for(int i=0;i<6;i++)texts[i] = "item"+String.valueOf(i);
+
+    for(int i = 0 ; i<deviceTexts.length; i++){
+        if(deviceTexts[i][0].equals(DEVICE_NAME)){
+          for(int j = 1; j<deviceTexts[i].length;j++){
+              texts[j-1]=deviceTexts[i][j];
+          }
+          break;
+        }
     }
   }
- 
+
   /////////////////
   private int drawDevice(int y_last, int counter) {
+
     long since_last_update = System.currentTimeMillis() /1000L -last_update_unix ;
     if ( !(update_rate-since_last_update>0 && !needUpdate))needUpdate = true;
 
@@ -110,7 +96,6 @@ class Device {
       else if(!isActive)text(0, 300, start_y+192);
       else {
         text("güncelleme bekleniyor", 300, start_y+192);
-        needUpdate = true;
       }
 
       fill(0);
@@ -158,9 +143,9 @@ class Device {
 
     else if (f.isIn(x, y, 210, 210, 180, 40)) {
       needUpdate=true;
-      isActive=true;
-      indexNow = index_of_this_object;
-      refreshQue();
+      //isActive=true;
+      //indexNow = index_of_this_object;
+      //refreshQue();
     } else if (f.isIn(x, y, 633, 165, 30, 30))booleans[0] = ! booleans[0];
     else if (f.isIn(x, y, 770, 165, 30, 30))booleans[1] = ! booleans[1];
     else if (f.isIn(x, y, 910, 165, 30, 30))booleans[2] = ! booleans[2];
@@ -180,20 +165,16 @@ class Device {
     last_update_unix = System.currentTimeMillis() /1000L;
     needUpdate=false;
   }
-  
+
   void analzeThisReply(long SENDER_ID, long DESTINATION_ID,long TASK, long WHICH_ITEM, float FLOAT_VALUE ){
-    if(SENDER_ID != Long.valueOf(ID))return;    
+    if(SENDER_ID != Long.valueOf(ID))return;
     //println("reply",SENDER_ID,DESTINATION_ID,TASK,WHICH_ITEM, FLOAT_VALUE);
     if(TASK==0)return;
     else if(TASK==1)return;
     else if(TASK==2){//device replies
       last_communication_unix = System.currentTimeMillis() /1000L;
-      last_update_unix = System.currentTimeMillis() /1000L;
       if(WHICH_ITEM<3)floats[(int)WHICH_ITEM]=FLOAT_VALUE;
-      isDeviceAvailable=true;      
-    } else if(TASK==3){//Lora replies
-      last_communication_unix = System.currentTimeMillis() /1000L;
-      isDeviceAvailable=false;      
+      isDeviceAvailable=true;
     }
   }
   String addThisToQue() {
