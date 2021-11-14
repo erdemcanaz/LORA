@@ -57,7 +57,8 @@ class Device {
   private int drawDevice(int y_last, int counter) {
 
     long since_last_update = System.currentTimeMillis() /1000L -last_update_unix ;
-    if ( !(update_rate-since_last_update>0 && !needUpdate))needUpdate = true;
+    if ( !(update_rate-since_last_update>0))needUpdate = true;
+    else needUpdate = false;
 
     // 50<= y <= 1000
     int shift = 46;
