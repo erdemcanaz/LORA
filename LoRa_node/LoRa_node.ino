@@ -134,7 +134,7 @@ void listen_broadcast_and_write_it_to_serial() {
     if(loraMsg.DESTINATION_ID == THIS_ID){
       print_msg(false,true);
     }else{
-      if (TROUBLESHOOTING)Serial.println("data bana ("+String(THIS_ID)+") degil ("+String(loraMsg.DESTINATION_ID)+")'a gonderilmis.");
+      if (TROUBLESHOOTING)Serial.println("data bana (ID_THIS:"+String(THIS_ID)+") degil (ID_DESTINATION:"+String(loraMsg.DESTINATION_ID)+")'a gonderilmis.");
     }
 
 
