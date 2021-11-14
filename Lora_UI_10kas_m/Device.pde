@@ -1,5 +1,5 @@
 class Device {
-  int index_of_this_object = 0;
+  int index_of_this_object;
   String ID;
   String DEVICE_NAME;
   String tag="";
@@ -141,11 +141,10 @@ class Device {
     else if (f.isIn(x, y, 345, 133, 72, 22)) update_rate = 3600;
     else if (f.isIn(x, y, 425, 133, 72, 22)) update_rate = 10800;
 
-    else if (f.isIn(x, y, 210, 210, 180, 40)) {
+    else if (f.isIn(x, y, 210, 210, 180, 40)) { 
+      indexNow = index_of_this_object;
       needUpdate=true;
-      //isActive=true;
-      //indexNow = index_of_this_object;
-      //refreshQue();
+      
     } else if (f.isIn(x, y, 633, 165, 30, 30))booleans[0] = ! booleans[0];
     else if (f.isIn(x, y, 770, 165, 30, 30))booleans[1] = ! booleans[1];
     else if (f.isIn(x, y, 910, 165, 30, 30))booleans[2] = ! booleans[2];

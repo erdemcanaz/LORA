@@ -26,19 +26,17 @@ long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]
 boolean isSerialLocked = true;
 
 boolean listenSerial() {
-//#: start $:end ;:other variable .:other variable
+  //#: start $:end ;:other variable .:other variable
   //negative values are omited
   if (!(myPort.available() > 0))return false;
   char c = (char)myPort.read();
 
   if (isSerialLocked && c != '#') {
     return false;
-  }
-  else if (c == '#') {
+  } else if (c == '#') {
     f.clean_values();
     isSerialLocked = false;
-  }
-  else if (c == '$') {
+  } else if (c == '$') {
     int counter = (int)(values[6]);
     if (counter != 5) {
       isSerialLocked = true;
@@ -48,8 +46,8 @@ boolean listenSerial() {
 
     float k = values[5];
     while (k > 1)k = k / 10.0f;
-    println("reply",values[0],values[1],values[2],values[3],values[4]+k);
-    f.broadcastReplyToAllDevices(values[0],values[1],values[2],values[3],values[4]+k);
+    println("reply", values[0], values[1], values[2], values[3], values[4]+k);
+    f.broadcastReplyToAllDevices(values[0], values[1], values[2], values[3], values[4]+k);
     //
     f.clean_values();
     isSerialLocked = true;
@@ -62,18 +60,17 @@ boolean listenSerial() {
     if (values[6] == 6) {
       isSerialLocked = true;
     }
-
   }
   return false;
 }
 
-
+long QUE_DELAY_MS = 8000;
 int indexNow=0;
 long lastTimeQueAsked = 0;
+
 void askQue() {
-  long QUE_DELAY_MS = 8000;
-  if (System.currentTimeMillis()-lastTimeQueAsked<QUE_DELAY_MS)return;
-  lastTimeQueAsked=System.currentTimeMillis();
+
+
   //----
   for (; indexNow<128; indexNow++) {
     if (que[indexNow]==null) {
@@ -88,7 +85,9 @@ void askQue() {
   }
 
   ///---
-  //println(indexNow, que[indexNow]);
+  if (System.currentTimeMillis()-lastTimeQueAsked<QUE_DELAY_MS)return;
+  lastTimeQueAsked=System.currentTimeMillis();
+  //
   String subQues[]= que[indexNow].split("-");
   String nextQue= "";
   if (subQues.length>1) {
@@ -99,7 +98,7 @@ void askQue() {
   } else {
     device_objs[indexNow].updated();
   }
-  println("soruldu:",subQues[0]);
+  println(millis(), "soruldu:", subQues[0]);
   myPort.write(subQues[0]);
   if (nextQue.equals(""))que[indexNow]=null;
   else que[indexNow]=nextQue;
