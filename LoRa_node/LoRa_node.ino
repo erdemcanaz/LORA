@@ -8,11 +8,12 @@
 #define RESET_PIN 7 //this pin directly connected to reset pin of arduino
 
 #define HARD_RESET_TIME 90000 // after how much miliseconds should device reset itself
+#define DEL_RESET_MAX 30000
 unsigned long DEL_RESET_TIME; //to be sure that arduino reset time differs.
 
 #define BROADCAST_DELAY 2000 // how much miliseconds should pass to broadcast the new data
 
-
+//-------------------------------------
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
 
@@ -33,7 +34,7 @@ void setup() {
   e32ttl.begin();
   pinMode(AUX_PIN, INPUT);
   pinMode(RESET_PIN,OUTPUT);
-  DEL_RESET_TIME = random(30000);
+  DEL_RESET_TIME = random(DEL_RESET_MAX);
 
 }
 
