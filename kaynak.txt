@@ -1,0 +1,1 @@
+https://arduino.stackexchange.com/questions/72085/if-arduino-connected-to-computer-and-opened-up-serial-monitor-will-tx-and-rx-pi
