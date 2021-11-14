@@ -1,11 +1,22 @@
-#define TROUBLESHOOTING false
-#define AUX_PIN 8
-#define RESET_PIN 7
-#define HARD_RESET_TIME 120000
+#define TROUBLESHOOTING false //if you want to see th process ongoing, should be turned of while operating
+
+#define THIS_ID 1 //ID of this device, it is imporant it to be unique.
+
+#define SOFTWARE_RX_PIN 10 //this pin is directly connected to LoRa Tx
+#define SOFTWARE_TX_PIN 11 //this pin is connected to LoRa Rx with a voltage divider 2/3.
+#define AUX_PIN 8 // this pin is directly connected to aux pin of LoRa module
+#define RESET_PIN 7 //this pin directly connected to reset pin of arduino
+
+#define HARD_RESET_TIME 90000 // after how much miliseconds should device reset itself
+unsigned long DEL_RESET_TIME; //to be sure that arduino reset time differs.
+
+#define BROADCAST_DELAY 2000 // how much miliseconds should pass to broadcast the new data
+
+
 #include "LoRa_E32.h"
 #include <SoftwareSerial.h>
 
-SoftwareSerial mySerial(10, 11);
+SoftwareSerial mySerial(SOFTWARE_RX_PIN, SOFTWARE_TX_PIN);
 LoRa_E32 e32ttl(&mySerial);
 
 struct msg {
@@ -17,20 +28,21 @@ struct msg {
 };
 struct msg serialMsg, loraMsg;
 void setup() {
-  digitalWrite(RESET_PIN,HIGH);
+  digitalWrite(RESET_PIN,HIGH);//after defining a pin output, by default it is LOW. Thus if you put this after "pinMode(RESET_PIN,OUTPUT);", device continuously resets itself.
   Serial.begin(9600);
   e32ttl.begin();
   pinMode(AUX_PIN, INPUT);
   pinMode(RESET_PIN,OUTPUT);
+  DEL_RESET_TIME = random(30000);
 
 }
 
 
 void loop() {
   ///
-  if(millis()>HARD_RESET_TIME)digitalWrite(RESET_PIN,LOW);
+  if(millis()>HARD_RESET_TIME+DEL_RESET_TIME)digitalWrite(RESET_PIN,LOW);
   ///
-  read_serial_and_broadcast_it(2000);
+  read_serial_and_broadcast_it(BROADCAST_DELAY);
   listen_broadcast_and_write_it_to_serial();
 }
 
@@ -92,7 +104,10 @@ boolean read_serial_and_broadcast_it(int period) {
       if (TROUBLESHOOTING)Serial.println("LoRa'nin musait olmasini bekliyorum");
       delay(5);
     }
+
+    serialMsg.SENDER_ID = THIS_ID;
     e32ttl.sendFixedMessage(0, 0, 0, &serialMsg, sizeof(msg));
+
     if (TROUBLESHOOTING)Serial.println("serialMsg'i lora uzerinden yaydim");
     return true;
 
@@ -115,7 +130,12 @@ void listen_broadcast_and_write_it_to_serial() {
     if (TROUBLESHOOTING)Serial.println("LoRa'daki mesaj okunuyor");
     ResponseStructContainer rsc = e32ttl.receiveMessage(sizeof(msg));//LoRa'daki mesajı oku
     loraMsg = *(msg*) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
-    print_msg(false,true);
+    if(loraMsg.DESTINATION_ID == THIS_ID){
+      print_msg(false,true);
+    }else{
+      if (TROUBLESHOOTING)Serial.println("data bana ("+String(THIS_ID)+") degil ("+String(loraMsg.DESTINATION_ID)+")'a gonderilmis.");
+    }
+
 
   }
 }

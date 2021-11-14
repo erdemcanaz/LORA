@@ -71,7 +71,7 @@ boolean listenSerial() {
 int indexNow=0;
 long lastTimeQueAsked = 0;
 void askQue() {
-  long QUE_DELAY_MS = 3000;
+  long QUE_DELAY_MS = 8000;
   if (System.currentTimeMillis()-lastTimeQueAsked<QUE_DELAY_MS)return;
   lastTimeQueAsked=System.currentTimeMillis();
   //----
