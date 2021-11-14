@@ -105,7 +105,7 @@ class Device {
       text(texts[3], 532, start_y+182);
       text(texts[4], 674, start_y+182);
       text(texts[5], 805, start_y+182);
-      fill(0, 162, 232);
+      fill(255);
       text(floats[0], 532, start_y+122);
       text(floats[1], 674, start_y+122);
       text(floats[2], 805, start_y+122);
@@ -141,9 +141,11 @@ class Device {
     else if (f.isIn(x, y, 345, 133, 72, 22)) update_rate = 3600;
     else if (f.isIn(x, y, 425, 133, 72, 22)) update_rate = 10800;
 
-    else if (f.isIn(x, y, 210, 210, 180, 40)) { 
-      indexNow = index_of_this_object;
+    else if (f.isIn(x, y, 210, 210, 180, 40)) {       
       needUpdate=true;
+      if(!isActive)return true;
+      refreshQue();
+      indexNow = index_of_this_object;
       
     } else if (f.isIn(x, y, 633, 165, 30, 30))booleans[0] = ! booleans[0];
     else if (f.isIn(x, y, 770, 165, 30, 30))booleans[1] = ! booleans[1];
