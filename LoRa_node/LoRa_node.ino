@@ -1,4 +1,4 @@
-#define TROUBLESHOOTING false //if you want to see th process ongoing, should be turned of while operating
+#define TROUBLESHOOTING true //if you want to see th process ongoing, should be turned of while operating
 
 #define THIS_ID 1 //ID of this device, it is imporant it to be unique.
 
