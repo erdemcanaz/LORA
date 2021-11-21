@@ -1,10 +1,10 @@
-#define TROUBLESHOOTING true //if you want to see th process ongoing, should be turned of while operating
+#define TROUBLESHOOTING false //if you want to see th process ongoing, should be turned of while operating
 
 #define THIS_ID 1 //ID of this device, it is imporant it to be unique.
 
-#define SOFTWARE_RX_PIN 10 //this pin is directly connected to LoRa Tx
-#define SOFTWARE_TX_PIN 11 //this pin is connected to LoRa Rx with a voltage divider 2/3.
-#define AUX_PIN 8 // this pin is directly connected to aux pin of LoRa module
+#define SOFTWARE_RX_PIN 8 //this pin is directly connected to LoRa Tx
+#define SOFTWARE_TX_PIN 9 //this pin is connected to LoRa Rx with a voltage divider 2/3.
+#define AUX_PIN 4 // this pin is directly connected to aux pin of LoRa module
 #define RESET_PIN 7 //this pin directly connected to reset pin of arduino
 
 #define HARD_RESET_TIME 90000 // after how much miliseconds should device reset itself
@@ -47,6 +47,7 @@ void loop() {
   listen_broadcast_and_write_it_to_serial();
 }
 
+void (* resetFunc)(void) = 0;
 
 unsigned long values[] = {0, 0, 0, 0, 0, 0, 0}; // [0]:SENDER_ID, [1]:DESTINATION_ID, [2]:TASK, [3]:WHICH_OBJECT, [4]: FLOAT_INTEGER, [5]:FLOAT_DECIMAL, [6]: counter
 boolean isSerialLocked = true;

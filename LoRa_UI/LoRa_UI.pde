@@ -64,7 +64,7 @@ boolean listenSerial() {
   return false;
 }
 
-long QUE_DELAY_MS = 8000;
+long QUE_DELAY_MS = 6000;
 int indexNow=0;
 long lastTimeQueAsked = 0;
 

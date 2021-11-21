@@ -130,7 +130,7 @@ class Device {
     if (f.isIn(x, y, 50, 10, 30, 30))return true;
     else if (f.isIn(x, y, 80, 10, 690, 30))isVisible = !isVisible;
     else if (f.isIn(x, y, 780, 10, 170, 30))isActive = !isActive;
-    else if (f.isIn(x, y, 108, 105, 72, 22)) update_rate = 1;
+    else if (f.isIn(x, y, 108, 105, 72, 22)) update_rate = 5;
     else if (f.isIn(x, y, 187, 105, 72, 22)) update_rate = 20;
     else if (f.isIn(x, y, 266, 105, 72, 22)) update_rate = 40;
     else if (f.isIn(x, y, 345, 105, 72, 22)) update_rate = 60;
