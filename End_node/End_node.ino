@@ -1,4 +1,4 @@
-#define TROUBLESHOOTING true //if you want to see th process ongoing, should be turned of while operating
+#define TROUBLESHOOTING false //if you want to see th process ongoing, should be turned of while operating
 #define RESET_PIN 7 //this pin directly connected to reset pin of arduino
 
 #define HARD_RESET_TIME 90000 // after how much miliseconds should device reset itself
@@ -7,7 +7,7 @@ unsigned long DEL_RESET_TIME; //to be sure that arduino reset time differs.
 
 #define BROADCAST_DELAY 2000 // how much miliseconds should pass to broadcast the new data
 
-float objects[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+float objects[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};//stores virtual values
 struct msg {
   unsigned long SENDER_ID = 0;
   unsigned long DESTINATION_ID = 0;
@@ -33,10 +33,11 @@ void loop() {
     if (TROUBLESHOOTING)Serial.println("Serial mesajı alinmis");
     reply_it();
   }
-  ///////----------------------------------------
-
+  ///////---------------------------------------
   //write code that sets or gets values from values[];
-
+  objects[0] = random(5000) / 9.9f;
+  objects[1] = random(5000) / 9.9f;
+  objects[2] = random(5000) / 9.9f;
 
 }
 
@@ -71,7 +72,7 @@ void reply_it() {
     }
   } else if (task == 1) { //send WHICH_OBJECT to master
     if (object >= 0 && object < 3) { //0,1,2
-      serialMsg.FLOAT_VALUE = values[object];
+      serialMsg.FLOAT_VALUE = objects[object];
       if (TROUBLESHOOTING)Serial.println(String(object) + ". objenin degeri olan " + String(values[object]) + " gönderilecek");
       Serial.print("#" + String(serialMsg.SENDER_ID));
       Serial.print("," + String(serialMsg.DESTINATION_ID));
@@ -84,7 +85,8 @@ void reply_it() {
       if (TROUBLESHOOTING)Serial.println(String(object) + ". objenin degeri öğrenilemez.");
       return;
     }
-  }  
+  }
+  if (TROUBLESHOOTING)Serial.println("Task:" + String(task) + ", 0 (SET) veya 1 (LEARN) olmadiginden cevap verilmedi.");
 }
 boolean read_serial() {
   //#: start $:end ;:other variable .:other variable

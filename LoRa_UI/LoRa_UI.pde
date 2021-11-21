@@ -12,7 +12,7 @@ void setup() {
   img[0] = loadImage("ust menu.png");
   img[1] = loadImage("cihaz menu.png");
   img[2] = loadImage("alt menu.png");
-  String portName = Serial.list()[1]; //change the 0 to a 1 or 2 etc. to match your port
+  String portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
   myPort = new Serial(this, portName, 9600);
 }
 
