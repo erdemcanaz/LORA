@@ -1,4 +1,4 @@
-#define TROUBLESHOOTING false //if you want to see th process ongoing, should be turned of while operating
+#define TROUBLESHOOTING true //if you want to see th process ongoing, should be turned of while operating
 
 #define THIS_ID 1 //ID of this device, it is imporant it to be unique.
 
@@ -131,7 +131,7 @@ void listen_broadcast_and_write_it_to_serial() {
   while (e32ttl.available() > 1) { // LoRa'da okunabilecek mesaj var mı?
     if (TROUBLESHOOTING)Serial.println("LoRa'daki mesaj okunuyor");
     ResponseStructContainer rsc = e32ttl.receiveMessage(sizeof(msg));//LoRa'daki mesajı oku
-    loraMsg = *(msg*) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
+    loraMsg = (msg) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
     if(loraMsg.DESTINATION_ID == THIS_ID){
       print_msg(false,true);
     }else{
