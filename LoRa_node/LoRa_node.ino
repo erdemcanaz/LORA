@@ -131,7 +131,7 @@ void listen_broadcast_and_write_it_to_serial() {
   while (e32ttl.available() > 1) { // LoRa'da okunabilecek mesaj var mı?
     if (TROUBLESHOOTING)Serial.println("LoRa'daki mesaj okunuyor");
     ResponseStructContainer rsc = e32ttl.receiveMessage(sizeof(msg));//LoRa'daki mesajı oku
-    loraMsg = (msg) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
+    loraMsg = *(msg*) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
     if(loraMsg.DESTINATION_ID == THIS_ID){
       print_msg(false,true);
     }else{
