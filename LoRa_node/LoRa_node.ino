@@ -29,22 +29,21 @@ struct msg {
 };
 struct msg serialMsg, loraMsg;
 void setup() {
-  digitalWrite(RESET_PIN,HIGH);//after defining a pin output, by default it is LOW. Thus if you put this after "pinMode(RESET_PIN,OUTPUT);", device continuously resets itself.
+  digitalWrite(RESET_PIN, HIGH); //after defining a pin output, by default it is LOW. Thus if you put this after "pinMode(RESET_PIN,OUTPUT);", device continuously resets itself.
   Serial.begin(9600);
   e32ttl.begin();
   pinMode(AUX_PIN, INPUT);
-  pinMode(RESET_PIN,OUTPUT);
+  pinMode(RESET_PIN, OUTPUT);
   DEL_RESET_TIME = random(DEL_RESET_MAX);
 
 }
 
 
 void loop() {
-  ///
-  if(millis()>HARD_RESET_TIME+DEL_RESET_TIME)digitalWrite(RESET_PIN,LOW);
-  ///
-  read_serial_and_broadcast_it(BROADCAST_DELAY);
-  listen_broadcast_and_write_it_to_serial();
+     if(millis()>HARD_RESET_TIME+DEL_RESET_TIME)digitalWrite(RESET_PIN,LOW);
+    ///
+    read_serial_and_broadcast_it(BROADCAST_DELAY);
+    listen_broadcast_and_write_it_to_serial();
 }
 
 void (* resetFunc)(void) = 0;
@@ -92,7 +91,7 @@ boolean read_serial_and_broadcast_it(int period) {
     while (k > 1)k = k / 10.0f;
     serialMsg.FLOAT_VALUE = values[4] + k;
 
-    if (TROUBLESHOOTING)print_msg(true,false);
+    if (TROUBLESHOOTING)print_msg(true, false);
     for (int i = 0 ; i < 7; i ++)values[i] = 0;
     isSerialLocked = true;
 
@@ -132,18 +131,18 @@ void listen_broadcast_and_write_it_to_serial() {
     if (TROUBLESHOOTING)Serial.println("LoRa'daki mesaj okunuyor");
     ResponseStructContainer rsc = e32ttl.receiveMessage(sizeof(msg));//LoRa'daki mesajı oku
     loraMsg = *(msg*) rsc.data; //LoRa'daki mesajı data_lora'ya kaydet
-    if(loraMsg.DESTINATION_ID == THIS_ID){
-      print_msg(false,true);
-    }else{
-      if (TROUBLESHOOTING)Serial.println("data bana (ID_THIS:"+String(THIS_ID)+") degil (ID_DESTINATION:"+String(loraMsg.DESTINATION_ID)+")'a gonderilmis.");
+    if (loraMsg.DESTINATION_ID == THIS_ID) {
+      print_msg(false, true);
+    } else {
+      if (TROUBLESHOOTING)Serial.println("data bana (ID_THIS:" + String(THIS_ID) + ") degil (ID_DESTINATION:" + String(loraMsg.DESTINATION_ID) + ")'a gonderilmis.");
     }
 
 
   }
 }
 
-void print_msg(boolean isSerial,boolean isFormatted) {
-  if(isFormatted){
+void print_msg(boolean isSerial, boolean isFormatted) {
+  if (isFormatted) {
     if (isSerial) {
       Serial.print("#" + String(serialMsg.SENDER_ID));
       Serial.print("," + String(serialMsg.DESTINATION_ID));
@@ -160,22 +159,22 @@ void print_msg(boolean isSerial,boolean isFormatted) {
       Serial.print("," + String(loraMsg.FLOAT_VALUE, 5));
       Serial.println("$");
     }
-  }else{
-  if (isSerial) {
-    Serial.print("SerialMsg //:");
-    Serial.print(" SENDER_ID:" + String(serialMsg.SENDER_ID));
-    Serial.print(" DESTINATION_ID:" + String(serialMsg.DESTINATION_ID));
-    Serial.print(" TASK:" + String(serialMsg.TASK));
-    Serial.print(" WHICH_OBJECT:" + String(serialMsg.WHICH_OBJECT));
-    Serial.println(" FLOAT_VALUE:" + String(serialMsg.FLOAT_VALUE, 5));
+  } else {
+    if (isSerial) {
+      Serial.print("SerialMsg //:");
+      Serial.print(" SENDER_ID:" + String(serialMsg.SENDER_ID));
+      Serial.print(" DESTINATION_ID:" + String(serialMsg.DESTINATION_ID));
+      Serial.print(" TASK:" + String(serialMsg.TASK));
+      Serial.print(" WHICH_OBJECT:" + String(serialMsg.WHICH_OBJECT));
+      Serial.println(" FLOAT_VALUE:" + String(serialMsg.FLOAT_VALUE, 5));
+    }
+    else {
+      Serial.print("loraMsg //:");
+      Serial.print(" SENDER_ID:" + String(loraMsg.SENDER_ID));
+      Serial.print(" DESTINATION_ID:" + String(loraMsg.DESTINATION_ID));
+      Serial.print(" TASK:" + String(loraMsg.TASK));
+      Serial.print(" WHICH_OBJECT:" + String(loraMsg.WHICH_OBJECT));
+      Serial.println(" FLOAT_VALUE:" + String(loraMsg.FLOAT_VALUE, 5));
+    }
   }
-  else {
-    Serial.print("loraMsg //:");
-    Serial.print(" SENDER_ID:" + String(loraMsg.SENDER_ID));
-    Serial.print(" DESTINATION_ID:" + String(loraMsg.DESTINATION_ID));
-    Serial.print(" TASK:" + String(loraMsg.TASK));
-    Serial.print(" WHICH_OBJECT:" + String(loraMsg.WHICH_OBJECT));
-    Serial.println(" FLOAT_VALUE:" + String(loraMsg.FLOAT_VALUE, 5));
-  }
-}
 }
