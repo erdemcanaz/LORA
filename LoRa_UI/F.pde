@@ -47,7 +47,7 @@ class F {
 
   //DRAW//////////////////////////////////////////////////
   private void cleanBackground() {
-    background(255);
+    background(230);
   }
   private void drawDevices(int start_y, int del_y) {
     int Y= start_y+del_y;

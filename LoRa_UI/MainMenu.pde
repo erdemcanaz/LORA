@@ -7,11 +7,11 @@ class MainMenu {
   private void drawMenu() {
     image(img[0], 0, 0);
     textSize(25);
-    fill(255, 174, 201);
+    fill(255, 255, 255);
     long unixTime = System.currentTimeMillis() / 1000L;
-    text(f.secToHour(unixTime),25,33);
-    text(ID, 200, 33);
-    text(DEVICE_NAME, 555, 33);   
+    text(f.secToHour(unixTime),25,35);
+    text(ID, 200, 35);
+    text(DEVICE_NAME, 555, 35);   
   }
 
   private boolean keyAction(char c, int x, int y) {

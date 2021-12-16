@@ -9,9 +9,9 @@ F f = new F();
 void setup() {
   size(1000, 600);
   frameRate(30);
-  img[0] = loadImage("ust menu.png");
-  img[1] = loadImage("cihaz menu.png");
-  img[2] = loadImage("alt menu.png");
+  img[0] = loadImage("ust menu png.png");
+  img[1] = loadImage("cihaz menu png.png");
+  img[2] = loadImage("alt menu png.png");
   String portName = Serial.list()[0]; //change the 0 to a 1 or 2 etc. to match your port
   myPort = new Serial(this, portName, 9600);
 }

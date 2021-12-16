@@ -72,31 +72,32 @@ class Device {
     image(img[1], 50, start_y);
     //DEVICE_MENU TEXTS
     textSize(25);
-    fill(0, 162, 232);
-    text(counter, 140, start_y+25);
-    text(ID, 265, start_y+25);
-    text(DEVICE_NAME, 495, start_y+25);
+    fill(0, 0, 0);
+    text(counter, 140, start_y+27);
+    text(ID, 267, start_y+27);
+    text(DEVICE_NAME, 497, start_y+27);
 
-    if (!isActive)fill(255, 0, 0);
+    if (!isActive)fill(0, 0, 0);
     else {
-      if (isDeviceAvailable)fill(0, 255, 0);
-      else fill(255, 255, 0);
+      if (isDeviceAvailable)fill(255);
+      else fill(255, 0, 255);
     }
     text(f.secToHour(last_communication_unix), 820, start_y+25);
     //DEVICE SUB MENU TEXTS
     if (isVisible) {
-      fill(0, 162, 232);
+      fill(0, 0, 0);
       image(img[2], 50, start_y+46);
-      textSize(20);
-      text(tag, 165, start_y+70);
-      text(String.valueOf(update_rate), 285, start_y+90);
-      text(f.secToHour(last_update_unix), 242, start_y+170);
+      textSize(18);
+      text(tag, 248, start_y+70);
+      text(String.valueOf(update_rate), 248, start_y+90);
+      
+      text(f.secToHour(last_update_unix), 248, start_y+170);
 
       since_last_update = System.currentTimeMillis() /1000L -last_update_unix ;
-      if (update_rate-since_last_update>0 && !needUpdate)text(String.valueOf(update_rate-since_last_update), 300, start_y+192);
-      else if(!isActive)text(0, 300, start_y+192);
+      if (update_rate-since_last_update>0 && !needUpdate)text(String.valueOf(update_rate-since_last_update), 248, start_y+192);
+      else if(!isActive)text(0, 248, start_y+192);
       else {
-        text("güncelleme bekleniyor", 300, start_y+192);
+        text("güncelleme bekleniyor", 248, start_y+192);
       }
 
       fill(0);
@@ -106,7 +107,7 @@ class Device {
       text(texts[3], 532, start_y+182);
       text(texts[4], 674, start_y+182);
       text(texts[5], 805, start_y+182);
-      fill(255);
+      fill(0);
       text(floats[0], 532, start_y+122);
       text(floats[1], 674, start_y+122);
       text(floats[2], 805, start_y+122);
@@ -126,7 +127,6 @@ class Device {
   private boolean mouseAction(int x, int y) {
     //if true, erase this object,
     //println(x, y);
-
     if (f.isIn(x, y, 50, 10, 30, 30))return true;
     else if (f.isIn(x, y, 80, 10, 690, 30))isVisible = !isVisible;
     else if (f.isIn(x, y, 780, 10, 170, 30))isActive = !isActive;
@@ -142,9 +142,9 @@ class Device {
     else if (f.isIn(x, y, 345, 133, 72, 22)) update_rate = 3600;
     else if (f.isIn(x, y, 425, 133, 72, 22)) update_rate = 10800;
 
-    else if (f.isIn(x, y, 210, 210, 180, 40)) {       
-      needUpdate=true;
-      if(!isActive)return true;
+    else if (f.isIn(x, y, 210, 210, 180, 40)) { 
+      if(!isActive)return false; 
+      needUpdate=true;          
       refreshQue();
       indexNow = index_of_this_object;
       
